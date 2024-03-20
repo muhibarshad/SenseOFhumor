@@ -1,11 +1,8 @@
-import { Typography } from "@mui/material";
 import React from "react";
-
+import error from '../assets/error.png'
 const  Error = ()=>{
     return <>
-    <Typography variant="h1" gutterBottom>
-        403 forbidden Error
-        </Typography></>
+    <img src={error} alt="error" style={{height:'100vh', width:'100%'}}></img></>
 }
 
 export default Error

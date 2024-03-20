@@ -9,4 +9,9 @@ router.post('/login', authController.login);
 router.route('/')
     .get(userController.getAllUsers)
     .patch(userController.createUser)
+router.route('/auth-user')
+    .get(authController.protect, userController.authUser )
+
+router.route('/:id')
+.delete(userController.deleteUser)
 module.exports = router;

@@ -54,7 +54,7 @@ const Signup = (props)=>{
           confirmPassword: values.confirmPassword
         };
         try {
-          const user = await fetch('http://localhost:3001/signup', {
+          const user = await fetch('http://localhost:3002/signup', {
             method: 'POST',
             body: JSON.stringify(userData),
             headers: {
@@ -64,8 +64,10 @@ const Signup = (props)=>{
           const res = await user.json();
           if(res){
             console.log(res)
+            localStorage.setItem('token',res.token)
+            localStorage.setItem('id',res.data.id)
             props.loginHandler(true);
-            navigate('/profile')
+            navigate('/dashboard')
           }
         } catch (error) {
           console.error('Error:', error);
@@ -165,7 +167,7 @@ const Signup = (props)=>{
           helperText={formik.touched.email && formik.errors.email}
           sx={{mt:2}}
           variant="standard"
-
+          autoComplete={true}
 
         />
         <TextField
