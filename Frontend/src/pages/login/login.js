@@ -12,6 +12,7 @@ import * as yup from 'yup';
 import Classes from '../signup/signup.module.css'
 import { useState, useEffect } from "react";
 import { Link,useNavigate } from "react-router-dom";
+import CustomizedSnackbars from "../../components/snackbar";
 const validationSchema = yup.object({
     email: yup
       .string('Enter your email')
@@ -26,6 +27,7 @@ const validationSchema = yup.object({
 
 const Login = (props)=>{
   const navigate= useNavigate()
+  const [snackError,setSnakError]=useState(false);
     const formik = useFormik({
         initialValues: {
           email: '',
@@ -38,7 +40,7 @@ const Login = (props)=>{
             password: values.password,
           };
           try {
-            const user = await fetch('http://localhost:3001/login', {
+            const user = await fetch('http://localhost:3002/login', {
               method: 'POST',
               body: JSON.stringify(userData),
               headers: {
@@ -47,12 +49,14 @@ const Login = (props)=>{
             })
             const res = await user.json();
             if(res){
-              console.log(res)
               props.loginHandler(true);
-              navigate('/profile')
+              localStorage.setItem('token',res.token)
+              localStorage.setItem('id',res.data.user._id)
+              localStorage.setItem('name',res.data.user.name)
+              navigate('/dashboard')
             }
           } catch (error) {
-            console.error('Error:', error);
+            setSnakError(true);
           }
         },
       });
@@ -69,6 +73,7 @@ const Login = (props)=>{
       const viewPort = 1600;
     return <>
     <Container maxWidth="" disableGutters={true} >
+      <CustomizedSnackbars  open={snackError} setOpen= {setSnakError}  />
         <Grid container spacing={0} direction="row">
             {width>viewPort ? <Grid item md={8} sx={{sm:{display:'none'}, md:{display:'block'}}}>
                   <img src={cover} alt="cover" className={Classes.cover}/>
@@ -86,12 +91,13 @@ const Login = (props)=>{
                             </Grid>
                             <Grid item md={8} sx={{mb:2, mt:2}}>
                                  <Typography variant="h3">
-                                 FypIdeas
+                                 Sense of Humor
                                 </Typography>
                             </Grid>
                         </Grid>
                         <Typography variant="subtitle1"  gutterBottom>
-                                Here, we write our Einstienc ideas of fyp to save the future of anime
+                                Create your sense of humor tags, and share it in your about
+                                and tell people what type of sense of humor you have 
                                 </Typography>
                         <Grid
                     container
@@ -113,6 +119,7 @@ const Login = (props)=>{
           helperText={formik.touched.email && formik.errors.email}
           sx={{mt:2}}
           variant="standard"
+          autoComplete={true}
         />
         <TextField
           fullWidth

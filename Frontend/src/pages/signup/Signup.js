@@ -54,7 +54,7 @@ const Signup = (props)=>{
           confirmPassword: values.confirmPassword
         };
         try {
-          const user = await fetch('http://localhost:3001/signup', {
+          const user = await fetch('http://localhost:3002/signup', {
             method: 'POST',
             body: JSON.stringify(userData),
             headers: {
@@ -64,8 +64,10 @@ const Signup = (props)=>{
           const res = await user.json();
           if(res){
             console.log(res)
+            localStorage.setItem('token',res.token)
+            localStorage.setItem('id',res.data.id)
             props.loginHandler(true);
-            navigate('/profile')
+            navigate('/dashboard')
           }
         } catch (error) {
           console.error('Error:', error);
@@ -104,12 +106,13 @@ const Signup = (props)=>{
                             </Grid>
                             <Grid item md={8} sx={{mb:2, mt:2}}>
                                  <Typography variant="h3">
-                                 FypIdeas
+                                 Sense of Humor
                                 </Typography>
                             </Grid>
                         </Grid>
                         <Typography variant="subtitle1"  gutterBottom>
-                                Here, we write our Einstienc ideas of fyp to save the future of anime
+                        Create your sense of humor tags, and share it in your about
+                                and tell people what type of sense of humor you have 
                                 </Typography>
                         <Grid
                     container
@@ -165,7 +168,7 @@ const Signup = (props)=>{
           helperText={formik.touched.email && formik.errors.email}
           sx={{mt:2}}
           variant="standard"
-
+          autoComplete={true}
 
         />
         <TextField
